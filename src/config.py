@@ -1,8 +1,5 @@
 # src/config.py
-
-
-import os  # new
-
+import os
 
 class BaseConfig:
     TESTING = False
@@ -20,4 +17,9 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')  # new
+    url = os.environ.get("DATABASE_URL")
+
+    if url is not None and url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+
+    SQLALCHEMY_DATABASE_URI = url
